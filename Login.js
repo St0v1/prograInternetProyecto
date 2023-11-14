@@ -31,6 +31,7 @@ export default class Login extends Component {
         }
       };
       //xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/datos2.php?nombre=alex&correo=abc@&password=12345", true);
+      this.props.navigation.navigate("Votacion");
       xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/loginVotantes.php?correo="+ this.state.correo +"&password=" + this.state.password, true);
       xhttp.send();
       
@@ -46,10 +47,13 @@ export default class Login extends Component {
       <TextInput onChangeText={correo => this.setState({correo})}
         style={styles.input}
         placeholder="email"
+        placeholderTextColor="white" 
       />
       <TextInput onChangeText={password => this.setState({password})}
         style={styles.input}
         placeholder="password"
+        placeholderTextColor="white"
+        secureTextEntry={true} 
       />
        <TouchableOpacity style={styles.btn_entrar} onPress={ clic_ingresar }>
             <Text style={styles.txt_entrar}>Iniciar Sesion</Text>
