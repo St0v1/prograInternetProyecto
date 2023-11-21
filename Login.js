@@ -31,7 +31,8 @@ export default class Login extends Component {
         }
       };
       //xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/datos2.php?nombre=alex&correo=abc@&password=12345", true);
-      this.props.navigation.navigate("Votacion");
+      //this.props.navigation.navigate("Votacion");
+      this.props.navigation.navigate("Administrador");
       xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/loginVotantes.php?correo="+ this.state.correo +"&password=" + this.state.password, true);
       xhttp.send();
       
