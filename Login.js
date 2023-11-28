@@ -13,9 +13,8 @@ export default class Login extends Component {
   render() {
 
     const clic_ingresar = () => {
-      console.log("press");
       var xhttp = new XMLHttpRequest();
-      var conexion = false;
+      var conexion = false; 
       xhttp.onreadystatechange = () => {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
           console.log(xhttp.responseText);
@@ -25,14 +24,19 @@ export default class Login extends Component {
             if(xhttp.responseText === "0"){
               Alert.alert("Password malo. intenta de nuevo");
             }else{
-              this.props.navigation.navigate("Votacion");
+              if(xhttp.responseText === "2"){
+                this.props.navigation.navigate("Administrador");
+              }else{
+                this.props.navigation.navigate("Votacion");
+              }
+              
             }
           }
         }
       };
       //xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/datos2.php?nombre=alex&correo=abc@&password=12345", true);
-      //this.props.navigation.navigate("Votacion");
-      this.props.navigation.navigate("Administrador");
+      
+      //this.props.navigation.navigate("Administrador");
       xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/loginVotantes.php?correo="+ this.state.correo +"&password=" + this.state.password, true);
       xhttp.send();
       

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 
 export default class Administrador extends Component {
   constructor(props) {
@@ -14,6 +14,7 @@ export default class Administrador extends Component {
 
     this.obtenerPreguntas();
     this.siguientePregunta = this.siguientePregunta.bind(this);
+    this.reiniciar = this.reiniciar.bind(this);
   }
 
   obtenerPreguntas() {
@@ -27,6 +28,9 @@ export default class Administrador extends Component {
           preguntas: preguntasSplit,
           pregunta: preguntasSplit.length > 0 ? preguntasSplit[0] : null, 
         });
+      }
+      else {
+        console.log("error, no se encontro la bd")
       }
     };
     xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/datosPreguntas.php", true);
@@ -54,18 +58,40 @@ export default class Administrador extends Component {
   siguientePregunta() {
     const { preguntas, posicion } = this.state;
     const nuevaPosicion = posicion + 1;
-
+    console.log(nuevaPosicion)
     
-    if (nuevaPosicion < preguntas.length - 1) {
-      this.setState({
-        posicion: nuevaPosicion,
-        pregunta: preguntas[nuevaPosicion],
-      });
-    } else {
-      this.setState({
-        pregunta: "Fin del cuestionario",
-      });
-    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = () => {
+      if (xhttp.readyState === 4 && xhttp.status === 200) {
+        if (nuevaPosicion < preguntas.length - 1) {
+          this.setState({
+            posicion: nuevaPosicion,
+            pregunta: preguntas[nuevaPosicion],
+          });
+        } else {
+          this.setState({
+            pregunta: "Fin del cuestionario",
+          });
+        }
+      }
+    };
+    xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/actualizarStatus.php?id=" + nuevaPosicion, true);
+    xhttp.send();
+  }
+
+  reiniciar(){
+    const { preguntas} = this.state;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = () => {
+      if (xhttp.readyState === 4 && xhttp.status === 200) {
+        this.setState({
+          posicion: 0,
+          pregunta: preguntas[0],
+        });
+      }
+    };
+    xhttp.open("GET", "https://programacion-para-internet-i5909.000webhostapp.com/2023B/reiniciarStatus.php", true);
+    xhttp.send();
   }
 
   render() {
@@ -77,7 +103,8 @@ export default class Administrador extends Component {
           <Text style={styles.pregunta}>Administrador</Text>
           <Text style={styles.pregunta}>{pregunta}</Text>
           <Text style={styles.label}>Presiona cuando hayan contestado todos</Text>
-          <Button title="Activar Siguiente Pregunta" onPress={this.siguientePregunta} />
+          <Button title="Activar Pregunta" onPress={this.siguientePregunta} />
+          <Button title="Reiniciar Cuestionario" onPress={this.reiniciar} />
           <Text style={styles.pregunta}>{txtSeleccionada}</Text>
         </View>
       );
